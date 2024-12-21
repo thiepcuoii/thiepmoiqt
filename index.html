@@ -5599,29 +5599,32 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     document.getElementById('loi-chuc-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const hoTen = document.getElementById('hoTen').value;
-        const loiChuc = document.getElementById('loiChuc').value;
-        // Gửi dữ liệu lên Google Apps Script
-        fetch('https://script.google.com/macros/s/', {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                hoTen: hoTen,
-                loiChuc: loiChuc,
-            })
-        })
-        .then(() => {
-            document.getElementById('result-message').innerHTML =
-                "<div class='alert alert-successz'>Lời chúc đã được gửi thành công!</div>";
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('result-message').innerHTML =
-                "<div class='alert alert-danger'>Đã xảy ra lỗi khi gửi lời chúc. Vui lòng thử lại.</div>";
-        });
+    e.preventDefault();
+    const hoTen = document.getElementById('hoTen').value;
+    const loiChuc = document.getElementById('loiChuc').value;
+
+    // Lấy thời gian hiện tại
+    const currentTime = new Date().toLocaleString(); // Thời gian định dạng theo múi giờ máy người dùng
+
+    // Gửi dữ liệu lên Google Apps Script
+    fetch('https://script.google.com/macros/s/AKfycbylbymq_DXMQqa3OoxTMOWcCDvQuwqlCcu-rRAg_GGlRGO7IEYfYyZnCDFkBMoCrqcu/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            name: hoTen,
+            content: loiChuc,
+            time: currentTime, // Thêm thời gian vào dữ liệu gửi
+        }),
+    })
+    .then(() => {
+        document.getElementById('result-message').innerText = 'Gửi thành công!';
+    })
+    .catch(error => {
+        document.getElementById('result-message').innerText = 'Gửi thất bại!';
+        console.error('Error:', error);
     });
+});
 </script>
 <style>
     .container{
